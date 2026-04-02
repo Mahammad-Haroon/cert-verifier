@@ -86,3 +86,5 @@ Open your browser at **http://localhost:5000**
 - Set `SECRET_KEY` from an environment variable instead of `os.urandom(24)`.
 - Serve via **Gunicorn** behind **Nginx**.
 - Add HTTPS so QR codes resolve to `https://` URLs.
+- https://cert-verifier.onrender.com
+- 
