@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Certificate Verified — {{ company }}{% endblock %}
+
+{% block content %}
+<section class="verify-section">
+  <div class="verify-card">
+
+    <!-- Header -->
+    <div class="verify-header">
+      <div class="verify-logo-row">
+        <span class="verify-logo-mark">✦</span>
+        <span class="verify-company">{{ company }}</span>
+      </div>
+      <div class="verified-badge">
+        <span class="verified-check">✓</span>
+        <span>Verified Certificate</span>
+      </div>
+    </div>
+
+    <!-- Certificate image -->
+    <div class="cert-image-wrap">
+      <img
+        src="{{ url_for('static', filename='uploads/' ~ record.image) }}"
+        alt="Certificate for {{ record.candidate_name }}"
+        class="cert-image"
+      />
+      <div class="cert-overlay">
+        <span class="cert-overlay-text">✦ Official Certificate</span>
+      </div>
+    </div>
+
+    <!-- Details -->
+    <div class="verify-details">
+      <div class="detail-block">
+        <span class="detail-label">Candidate Name</span>
+        <span class="detail-value">{{ record.candidate_name }}</span>
+      </div>
+      <div class="detail-divider"></div>
+      <div class="detail-block">
+        <span class="detail-label">PNR Number</span>
+        <span class="detail-value mono">{{ record.pnr_number }}</span>
+      </div>
+      <div class="detail-divider"></div>
+      <div class="detail-block">
+        <span class="detail-label">Registration Date</span>
+        <span class="detail-value">{{ record.created_at[:10] }}</span>
+      </div>
+      <div class="detail-divider"></div>
+      <div class="detail-block">
+        <span class="detail-label">Issued By</span>
+        <span class="detail-value">{{ company }}</span>
+      </div>
+    </div>
+
+    <!-- Footer stamp -->
+    <div class="verify-footer">
+      <div class="stamp">
+        <div class="stamp-inner">
+          <p class="stamp-top">{{ company }}</p>
+          <p class="stamp-mid">VERIFIED</p>
+          <p class="stamp-bot">{{ record.created_at[:10] }}</p>
+        </div>
+      </div>
+      <p class="verify-note">This certificate was registered and verified via secure QR authentication. Do not accept certificates without a valid scan.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

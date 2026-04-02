@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Not Found — {{ company }}{% endblock %}
+{% block content %}
+<section class="error-section">
+  <p class="error-code">404</p>
+  <h1 class="error-title">Certificate<br><em>Not Found</em></h1>
+  <p class="error-sub">This verification link is invalid or the certificate has not been registered in our system.</p>
+  <a href="/" class="btn-primary"><span class="btn-label">Go Home</span><span class="btn-icon">→</span></a>
+</section>
+{% endblock %}

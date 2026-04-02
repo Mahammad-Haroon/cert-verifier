@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Upload Certificate — {{ company }}{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Secure Verification System</p>
+    <h1 class="hero-title">Certificate<br><em>Registry</em></h1>
+    <p class="hero-sub">Upload a certificate, enter the candidate's details, and receive an instant QR code linked to a tamper-evident verification page.</p>
+  </div>
+</section>
+
+<section class="form-section">
+  <div class="card form-card">
+    <h2 class="card-title">Register Certificate</h2>
+
+    {% if errors %}
+    <div class="alert alert-error">
+      <span class="alert-icon">⚠</span>
+      <ul>
+        {% for e in errors %}<li>{{ e }}</li>{% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data" novalidate>
+
+      <!-- Drop Zone -->
+      <div class="field">
+        <label class="label">Certificate Image</label>
+        <div class="drop-zone" id="dropZone">
+          <input type="file" name="certificate" id="certFile" accept=".png,.jpg,.jpeg,.webp" class="file-input" required />
+          <div class="drop-content" id="dropContent">
+            <div class="drop-icon">⬆</div>
+            <p class="drop-primary">Drag & drop your certificate</p>
+            <p class="drop-secondary">or <span class="browse-link">browse files</span></p>
+            <p class="drop-hint">PNG · JPG · JPEG · WEBP &nbsp;|&nbsp; Max 5 MB</p>
+          </div>
+          <div class="drop-preview" id="dropPreview" style="display:none;">
+            <img id="previewImg" src="" alt="Preview" />
+            <button type="button" class="remove-btn" id="removeFile">✕ Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Candidate Name -->
+      <div class="field">
+        <label class="label" for="candidate_name">Candidate Name</label>
+        <input
+          class="input"
+          type="text"
+          id="candidate_name"
+          name="candidate_name"
+          placeholder="e.g. Arjun Sharma"
+          value="{{ form.candidate_name if form else '' }}"
+          required
+        />
+      </div>
+
+      <!-- PNR Number -->
+      <div class="field">
+        <label class="label" for="pnr_number">PNR Number</label>
+        <input
+          class="input"
+          type="text"
+          id="pnr_number"
+          name="pnr_number"
+          placeholder="e.g. PNR-2024-00123"
+          value="{{ form.pnr_number if form else '' }}"
+          required
+        />
+        <p class="field-note">Each PNR maps to exactly one verification page.</p>
+      </div>
+
+      <button type="submit" class="btn-primary" id="submitBtn">
+        <span class="btn-label">Generate QR Code</span>
+        <span class="btn-icon">→</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Info panel -->
+  <aside class="info-panel">
+    <div class="step-card">
+      <span class="step-num">01</span>
+      <h3>Upload</h3>
+      <p>Choose the official certificate image issued to the candidate.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">02</span>
+      <h3>Register</h3>
+      <p>Provide the candidate's full name and their unique PNR number.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">03</span>
+      <h3>Verify</h3>
+      <p>Share the QR code. Anyone who scans it sees an instant verified page.</p>
+    </div>
+  </aside>
+</section>
+
+<script>
+  const dropZone   = document.getElementById("dropZone");
+  const fileInput  = document.getElementById("certFile");
+  const dropContent= document.getElementById("dropContent");
+  const dropPreview= document.getElementById("dropPreview");
+  const previewImg = document.getElementById("previewImg");
+  const removeBtn  = document.getElementById("removeFile");
+
+  function showPreview(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      previewImg.src = e.target.result;
+      dropContent.style.display = "none";
+      dropPreview.style.display = "flex";
+    };
+    reader.readAsDataURL(file);
+  }
+
+  dropZone.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", () => {
+    if (fileInput.files[0]) showPreview(fileInput.files[0]);
+  });
+
+  dropZone.addEventListener("dragover", e => {
+    e.preventDefault(); dropZone.classList.add("drag-over");
+  });
+  dropZone.addEventListener("dragleave", () => dropZone.classList.remove("drag-over"));
+  dropZone.addEventListener("drop", e => {
+    e.preventDefault(); dropZone.classList.remove("drag-over");
+    const f = e.dataTransfer.files[0];
+    if (f) { fileInput.files = e.dataTransfer.files; showPreview(f); }
+  });
+
+  removeBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    fileInput.value = "";
+    dropPreview.style.display = "none";
+    dropContent.style.display = "flex";
+  });
+
+  document.getElementById("uploadForm").addEventListener("submit", () => {
+    document.getElementById("submitBtn").classList.add("loading");
+  });
+</script>
+{% endblock %}

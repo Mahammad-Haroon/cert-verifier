@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}QR Code Generated — {{ company }}{% endblock %}
+
+{% block content %}
+<section class="result-section">
+  <div class="result-left">
+    <div class="success-badge">✓ Certificate Registered</div>
+    <h1 class="result-title">QR Code<br><em>Ready</em></h1>
+    <p class="result-sub">Your certificate has been securely stored. Share or print the QR code — scanning it opens the verification page instantly.</p>
+
+    <div class="meta-list">
+      <div class="meta-row">
+        <span class="meta-key">Candidate</span>
+        <span class="meta-val">{{ record.candidate_name }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-key">PNR</span>
+        <span class="meta-val mono">{{ record.pnr_number }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-key">Issued</span>
+        <span class="meta-val">{{ record.created_at[:10] }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-key">Verify URL</span>
+        <span class="meta-val mono small">{{ record.verify_url }}</span>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <a href="/download/qr/{{ record.token }}" class="btn-primary">
+        <span class="btn-label">Download QR Code</span>
+        <span class="btn-icon">↓</span>
+      </a>
+      <a href="{{ record.verify_url }}" target="_blank" class="btn-outline">
+        Preview Page ↗
+      </a>
+      <a href="/" class="btn-ghost">Upload Another</a>
+    </div>
+  </div>
+
+  <div class="result-right">
+    <div class="qr-frame">
+      <div class="qr-corner tl"></div>
+      <div class="qr-corner tr"></div>
+      <div class="qr-corner bl"></div>
+      <div class="qr-corner br"></div>
+      <img src="{{ qr_url }}" alt="QR Code" class="qr-image" />
+      <p class="qr-label">Scan to Verify</p>
+    </div>
+  </div>
+</section>
+{% endblock %}
