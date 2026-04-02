@@ -87,4 +87,3 @@ Open your browser at **http://localhost:5000**
 - Serve via **Gunicorn** behind **Nginx**.
 - Add HTTPS so QR codes resolve to `https://` URLs.
 - https://cert-verifier.onrender.com
-- 
